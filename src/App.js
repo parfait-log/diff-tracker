@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Upload, FileText, ArrowUp, ArrowDown, X } from 'lucide-react';
 import * as mammoth from 'mammoth';
 
@@ -55,7 +55,7 @@ function App() {
   };
 
   // 변경사항 그룹화 및 통계 계산
-  const analyzeDiff = () => {
+  const analyzeDiff = useCallback(() => {
     if (!originalText && !modifiedText) {
       setDiffResult(null);
       return;
@@ -99,11 +99,11 @@ function App() {
 
     setDiffResult({ groups, stats });
     setCurrentHighlight(-1);
-  };
+  }, [originalText, modifiedText]);
 
   useEffect(() => {
     analyzeDiff();
-  }, [originalText, modifiedText]);
+  }, [analyzeDiff]);
 
   // 워드 문서 읽기
   const handleFileUpload = async (file, setTextFunc) => {
